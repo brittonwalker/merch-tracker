@@ -1,0 +1,19 @@
+{
+  "name": "merch-tracker",
+  "version": "1.0.0",
+  "description": "Tool to track merch sales on tour.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/brittonwalker/merch-tracker.git"
+  },
+  "author": "Britton Walker",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brittonwalker/merch-tracker/issues"
+  },
+  "homepage": "https://github.com/brittonwalker/merch-tracker#readme"
+}
