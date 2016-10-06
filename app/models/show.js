@@ -6,7 +6,10 @@ var ShowSchema = new Schema({
   date: Date,
   venue: String,
   contact: String,
-  pay: Number
+  pay: Number,
+  city: String,
+  lat: String,
+  lang: String
   // merch: [Merch]
 })
 

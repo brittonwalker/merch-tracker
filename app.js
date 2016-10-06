@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var exphbs  = require('express-handlebars');
+var exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var router = express.Router();
 var mongoose = require('mongoose');
@@ -27,29 +27,76 @@ router.get('/', function(req, res) {
 });
 
 router.route('/show')
-    .post(function(req, res){
-      var show = new Show();
-      show.date = req.body.date;
-      show.venue = req.body.venue;
-      show.contact = req.body.contact;
-      show.pay = req.body.pay;
-      show.save(function(err) {
-        if (err) {
-          res.send(err);
-        }
-        res.json({
-          message: 'Created a new show!'
+    .post(function(req, res) {
+        var show = new Show();
+        show.date = req.body.date;
+        show.venue = req.body.venue;
+        show.contact = req.body.contact;
+        show.pay = req.body.pay;
+        show.city = req.body.city;
+        show.lat = req.body.lat;
+        show.lang = req.body.lang;
+        show.save(function(err) {
+            if (err) {
+                res.send(err);
+            }
+            res.json({
+                message: 'Created a new show!'
+            });
         });
-      });
     })
     .get(function(req, res) {
-      Show.find(function(err, show) {
-        if (err) {
-          res.send(err);
-        }
-        res.json(show);
-      })
+        Show.find(function(err, show) {
+            if (err) {
+                res.send(err);
+            }
+            res.json(show);
+        })
     })
+
+router.route('/show/:show_id')
+    .get(function(req, res) {
+        Show.findById(req.params.show_id, function(err, show) {
+            if (err)
+                res.send(err);
+            res.json(show);
+        });
+    })
+    .put(function(req, res) {
+        Show.findById(req.params.show_id, function(err, show) {
+            if (err) {
+                res.send(err)
+            }
+            show.date = req.body.date;
+            show.venue = req.body.venue;
+            show.contact = req.body.contact;
+            show.pay = req.body.pay;
+            show.city = req.body.city;
+            show.lat = req.body.lat;
+            show.lang = req.body.lang;
+
+            show.save(function(err) {
+                if (err) {
+                    res.send(err);
+                }
+                res.json({
+                    message: 'Show item updated!'
+                });
+            })
+        })
+    })
+    .delete(function(req, res) {
+        Show.remove({
+            _id: req.params.show_id
+        }, function(err, show) {
+            if (err) {
+                res.send(err);
+            }
+            res.json({
+                message: 'You deleted a merch item, I hope you meant to do that.'
+            });
+        });
+    });
 
 router.route('/merch')
     .post(function(req, res) {
@@ -57,13 +104,13 @@ router.route('/merch')
         merch.name = req.body.name;
         merch.quantity = req.body.quantity;
         merch.save(function(err) {
-                if (err) {
-                    res.send(err);
-                }
-                res.json({
-                    message: 'Created a new merch!'
-                })
+            if (err) {
+                res.send(err);
+            }
+            res.json({
+                message: 'Created a new merch!'
             })
+        })
     })
     .get(function(req, res) {
         Merch.find(function(err, merch) {
@@ -76,48 +123,54 @@ router.route('/merch')
 
 router.route('/merch/:merch_id')
 
-    // get the bear with that id (accessed at GET http://localhost:8080/api/bears/:bear_id)
-    .get(function(req, res) {
+// get the bear with that id (accessed at GET http://localhost:8080/api/bears/:bear_id)
+.get(function(req, res) {
         Merch.findById(req.params.merch_id, function(err, merch) {
             if (err)
                 res.send(err);
             res.json(merch);
         });
     })
-    .put(function(req, res){
+    .put(function(req, res) {
         Merch.findById(req.params.merch_id, function(err, merch) {
-          if (err){
-            res.send(err)
-          }
-          merch.name = req.body.name;
-          merch.quantity = req.body.quantity;
-
-          merch.save(function(err){
             if (err) {
-              res.send(err);
+                res.send(err)
             }
-            res.json({ message: 'Merch item updated!' });
-          })
+            merch.name = req.body.name;
+            merch.quantity = req.body.quantity;
+
+            merch.save(function(err) {
+                if (err) {
+                    res.send(err);
+                }
+                res.json({
+                    message: 'Merch item updated!'
+                });
+            })
         })
     })
-    .delete(function(req, res){
-      Merch.remove({
-        _id: req.params.merch_id
-      }, function(err, merch){
-        if (err){
-          res.send(err);
-        }
-        res.json({ message: 'You deleted a merch item, I hope you meant to do that.' });
-      });
+    .delete(function(req, res) {
+        Merch.remove({
+            _id: req.params.merch_id
+        }, function(err, merch) {
+            if (err) {
+                res.send(err);
+            }
+            res.json({
+                message: 'You deleted a merch item, I hope you meant to do that.'
+            });
+        });
     });
 
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.engine('handlebars', exphbs({
+    defaultLayout: 'main'
+}));
 app.set('view engine', 'handlebars');
-app.get('/', function(req, res){
-  res.render('home');
+app.get('/', function(req, res) {
+    res.render('home');
 })
-app.get('/shows', function(req, res){
-  res.render('shows');
+app.get('/shows', function(req, res) {
+    res.render('shows');
 })
 
 app.use(express.static('dist/'));
