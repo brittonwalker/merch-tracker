@@ -9,8 +9,8 @@ var ShowSchema = new Schema({
   pay: Number,
   city: String,
   lat: String,
-  lang: String
-  // merch: [Merch]
+  lang: String,
+  merch: []
 })
 
 module.exports = mongoose.model('Show', ShowSchema);

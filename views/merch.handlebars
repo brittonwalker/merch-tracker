@@ -1,0 +1,21 @@
+<div class="container">
+  <h2>The Merch Table</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Quantity</th>
+      </tr>
+    </thead>
+    <tbody id="merch-table">
+      {{#each merch}}
+
+        <tr>
+          <td><a href="http://localhost:8080/merch/{{_id}}">{{name}}</a></td>
+          <td>{{quantity}}</td>
+        </tr>
+
+      {{/each}}
+    </tbody>
+  </table>
+</div>

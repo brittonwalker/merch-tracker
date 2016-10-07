@@ -1,31 +1,22 @@
 
 <div class="container">
-  <h1>Shows</h1>
-<div id="mapid"></div>
+  <h1>Expenses</h1>
 </div>
 <div class="container">
-  <h2>Show Table</h2>
+  <h2>Expense Table</h2>
 <table class="table">
   <thead>
     <tr>
-      <th>Date</th>
-      <th>City</th>
-      <th>Venue</th>
-      <th>Contact</th>
-      <th>Pay</th>
+      <th>Description</th>
+      <th>Amount</th>
     </tr>
   </thead>
-  <tbody id="shows-table">
-    {{#each show}}
-
+  <tbody id="expense-table">
+    {{#each expense}}
       <tr>
-        <td><a href="http://localhost:8080/shows/{{_id}}">{{date}}</a></td>
-        <td>{{city}}</td>
-        <td>{{venue}}</td>
-        <td>{{contact}}</td>
-        <td>{{pay}}</td>
+        <td><a href="http://localhost:8080/expenses/{{_id}}">{{description}}</a></td>
+        <td>{{amount}}</td>
       </tr>
-
     {{/each}}
   </tbody>
 </table>

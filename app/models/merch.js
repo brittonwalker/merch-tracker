@@ -3,7 +3,8 @@ var Schema = mongoose.Schema;
 
 var MerchSchema = new Schema({
   name: String,
-  quantity: Number
+  quantity: Number,
+  sizes: []
 })
 
 module.exports = mongoose.model('Merch', MerchSchema);

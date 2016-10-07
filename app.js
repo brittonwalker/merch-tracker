@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 mongoose.connect('mongodb://brittonwalker:skateitup7@ds049486.mlab.com:49486/merch-tracker');
 var Merch = require('./app/models/merch');
 var Show = require('./app/models/show');
+var Expense = require('./app/models/expense');
 
 router.use(function(req, res, next) {
     console.log('Something is happening.');
@@ -36,6 +37,8 @@ router.route('/show')
         show.city = req.body.city;
         show.lat = req.body.lat;
         show.lang = req.body.lang;
+        show.merch = [];
+
         show.save(function(err) {
             if (err) {
                 res.send(err);
@@ -138,7 +141,7 @@ router.route('/merch/:merch_id')
             }
             merch.name = req.body.name;
             merch.quantity = req.body.quantity;
-
+            merch.sizes = req.body.sizes;
             merch.save(function(err) {
                 if (err) {
                     res.send(err);
@@ -161,6 +164,29 @@ router.route('/merch/:merch_id')
             });
         });
     });
+    router.route('/expense')
+        .post(function(req, res) {
+            var expense = new Expense();
+            expense.description = req.body.description;
+            expense.amount = req.body.amount;
+
+            expense.save(function(err) {
+                if (err) {
+                    res.send(err);
+                }
+                res.json({
+                    message: 'Created a new expense!'
+                });
+            });
+        })
+        .get(function(req, res) {
+            Expense.find(function(err, expense) {
+                if (err) {
+                    res.send(err);
+                }
+                res.json(expense);
+            })
+        });
 
 app.engine('handlebars', exphbs({
     defaultLayout: 'main'
@@ -170,10 +196,46 @@ app.get('/', function(req, res) {
     res.render('home');
 })
 app.get('/shows', function(req, res) {
-    res.render('shows');
+  Show.find(function(err, show) {
+      if (err) {
+          res.send(err);
+      }
+      res.render('shows', {show: show});
+  })
+})
+app.get('/merch', function(req, res) {
+  Merch.find(function(err, merch) {
+      if (err) {
+          res.send(err);
+      }
+      res.render('merch', {merch: merch});
+  })
+})
+app.get('/shows/:show_id', function(req, res) {
+    Show.findById(req.params.show_id, function(err, show) {
+        if (err)
+            res.send(err);
+        res.render('show-single-page', {show: show});
+    });
+})
+app.get('/merch/:merch_id', function(req, res) {
+    Merch.findById(req.params.merch_id, function(err, merch) {
+        if (err)
+            res.send(err);
+        res.render('merch-single-page', {merch: merch});
+    });
+})
+app.get('/expenses', function(req, res) {
+    Expense.find(function(err, expense) {
+        if (err) {
+            res.send(err);
+        }
+        res.render('expenses', {expense: expense});
+    })
 })
 
-app.use(express.static('dist/'));
+// app.use(express.static('dist/'));
+app.use(express.static(__dirname + '/dist/'));
 
 var port = process.env.PORT || 8080;
 
