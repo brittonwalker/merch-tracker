@@ -2,6 +2,11 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
 var jquery = require('gulp-jquery');
+var gutil = require('gulp-util');
+var jshint = require('gulp-jshint');
+var concat = require('gulp-concat');
+var stripDebug = require('gulp-strip-debug');
+var uglify = require('gulp-uglify');
 
 // source and distribution folder
 var source = 'src/',
@@ -45,7 +50,32 @@ gulp.task('sass', ['fonts'], function(){
     .pipe(gulp.dest(scss.out));
 });
 
-// default task
-gulp.task('default', ['sass'], function(){
-  gulp.watch(scss.watch, ['sass']);
+// configure the jshint task
+gulp.task('jshint', function() {
+  return gulp.src('src/javascript/**/*.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter('jshint-stylish'));
+});
+
+// configure which files to watch and what tasks to use on file changes
+gulp.task('watch', function() {
+  gulp.watch('src/javascript/**/*.js', ['jshint']);
+});
+
+// js concat, strip debugging and minify
+gulp.task('scripts', function() {
+  gulp.src(['./src/javascript/*.js', '.src/js/*.js'])
+    .pipe(concat('script.js'))
+    .pipe(stripDebug())
+    .pipe(uglify())
+    .pipe(gulp.dest('./dist/js/'));
+});
+
+gulp.task('default', ['watch', 'scripts', 'jshint', 'sass'], function() {
+  gulp.watch('./src/javascripts/*.js', function() {
+    gulp.run('jshint', 'scripts');
+  });
+  gulp.watch('./src/scss/*.scss', function() {
+    gulp.run('sass');
+  });
 });
