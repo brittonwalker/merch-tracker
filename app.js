@@ -15,7 +15,8 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 // Connect to DB
-mongoose.connect('mongodb://brittonwalker:skateitup7@ds049486.mlab.com:49486/merch-tracker' || 'http://localhost/merch');
+// 'mongodb://brittonwalker:skateitup7@ds049486.mlab.com:49486/merch-tracker'
+mongoose.connect('mongodb://localhost/merch');
 
 // Set template language
 app.engine('handlebars', exphbs({

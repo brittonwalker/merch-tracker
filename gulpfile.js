@@ -23,6 +23,19 @@ var fonts = {
     out: dest + 'fonts/'
 };
 
+// Get leaflet tools
+var leaflet = {
+  css: {
+    in: './node_modules/leaflet/dist/leaflet.css'
+  },
+  js: {
+    in: './node_modules/leaflet/dist/leaflet.js'
+  },
+  images: {
+    in: './node_modules/leaflet/dist/images/*'
+  }
+};
+
 // Scss source folder: .scss files
 var scss = {
     in: source + 'scss/main.scss',
@@ -43,6 +56,24 @@ gulp.task('fonts', function(){
       .pipe(gulp.dest(fonts.out));
 });
 
+gulp.task('leafletCss', function(){
+  return gulp
+    .src(leaflet.css.in)
+    .pipe(gulp.dest('./dist/css/'))
+})
+
+gulp.task('leafletImages', function(){
+  return gulp
+    .src(leaflet.images.in)
+    .pipe(gulp.dest('./dist/css/images'))
+})
+
+gulp.task('leafletJs', function(){
+  return gulp
+    .src(leaflet.js.in)
+    .pipe(gulp.dest('./dist/js/'))
+})
+
 // compile scss
 gulp.task('sass', ['fonts'], function(){
   return gulp.src(scss.in)
@@ -52,28 +83,28 @@ gulp.task('sass', ['fonts'], function(){
 
 // configure the jshint task
 gulp.task('jshint', function() {
-  return gulp.src('src/javascript/**/*.js')
+  return gulp.src('src/js/*.js')
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'));
 });
 
 // configure which files to watch and what tasks to use on file changes
 gulp.task('watch', function() {
-  gulp.watch('src/javascript/**/*.js', ['jshint']);
+  gulp.watch('src/js/*.js', ['jshint']);
 });
 
 // js concat, strip debugging and minify
 gulp.task('scripts', function() {
-  gulp.src(['./src/javascript/*.js', '.src/js/*.js'])
+  gulp.src(['./src/js/*.js', '.src/js/*.js'])
     .pipe(concat('script.js'))
-    .pipe(stripDebug())
-    .pipe(uglify())
+    // .pipe(stripDebug())
+    // .pipe(uglify())
     .pipe(gulp.dest('./dist/js/'));
 });
 
 gulp.task('default', ['watch', 'scripts', 'jshint', 'sass'], function() {
-  gulp.watch('./src/javascripts/*.js', function() {
-    gulp.run('jshint', 'scripts');
+  gulp.watch('./src/js/*.js', function() {
+    gulp.run('scripts');
   });
   gulp.watch('./src/scss/*.scss', function() {
     gulp.run('sass');

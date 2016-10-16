@@ -5,11 +5,11 @@ var Merch = require('./merch');
 var ShowSchema = new Schema({
   date: Date,
   venue: String,
+  address: String,
   contact: String,
   pay: Number,
   city: String,
-  lat: String,
-  lang: String,
+  coords: [],
   merch: []
 })
 

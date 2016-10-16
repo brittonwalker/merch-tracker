@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 var MerchSchema = new Schema({
   name: String,
   quantity: Number,
+  type: String,
   sizes: []
 })
 
