@@ -1,55 +1,49 @@
 <div class="container">
-  <h1>{{merch.name}}</h1>
-  <h2>{{merch.quantity}}</h2>
-  <h2>{{merch.type}}</h2>
-  {{#each merch.sizes}}
-    <p>{{size}}: {{quantity}}</p>
-  {{/each}}
-
-
-
-  <form id="merch-form" data-id="{{merch._id}}">
-    <div class="form-group">
-      <label for="name">Name</label>
-      <input type="text" class="form-control" id="name" value="{{merch.name}}">
-    </div>
-    <div class="form-group">
-      <label for="quantity">Quantity</label>
-      <input type="number" class="form-control" id="quantity" value="{{merch.quantity}}">
-    </div>
+    <h1>{{merch.name}}</h1>
+    <h2>{{merch.quantity}}</h2>
+    <h2>{{merch.type}}</h2>
     {{#each merch.sizes}}
-      <div class="form-group">
-        <label for="size-select">{{size}}</label>
-        <select class="form-control" id="{{size}}" type="hidden">
-          <option>{{size}}</option>
-        </select>
-        <input type="number" class="form-control" id="{{size}}-quantity" value="{{quantity}}">
-      </div>
+        <p>{{size}}: {{quantity}}</p>
     {{/each}}
-
-    <div class="form-group">
-      <label for="size-select">Medium</label>
-      <select class="form-control" id="medium">
-        <option>Medium</option>
-      </select>
-      <input type="number" class="form-control" id="medium-quantity">
-    </div>
-    <div class="form-group">
-      <label for="size-select">Large</label>
-      <select class="form-control" id="large">
+    <form id="merch-form" data-id="{{merch._id}}">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" value="{{merch.name}}">
+        </div>
+        <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="number" class="form-control" id="quantity" value="{{merch.quantity}}">
+        </div>
+        {{#each merch.sizes}}
+            <div class="form-group">
+                <label for="size-select">{{size}}</label>
+                <select class="form-control" id="{{size}}" type="hidden">
+                    <option>{{size}}</option>
+                </select>
+                <input type="number" class="form-control" id="{{size}}-quantity" value="{{quantity}}">
+            </div>
+        {{/each}}
+        <!-- <div class="form-group">
+<label for="size-select">Medium</label>
+<select class="form-control" id="medium">
+    <option>Medium</option>
+</select>
+<input type="number" class="form-control" id="medium-quantity">
+</div>
+<div class="form-group">
+    <label for="size-select">Large</label>
+    <select class="form-control" id="large">
         <option>Large</option>
-      </select>
-      <input type="number" class="form-control" id="large-quantity">
-    </div>
-    <div class="form-group">
-      <label for="size-select">X-Large</label>
-      <select class="form-control" id="xlarge">
+    </select>
+    <input type="number" class="form-control" id="large-quantity">
+</div>
+<div class="form-group">
+    <label for="size-select">X-Large</label>
+    <select class="form-control" id="xlarge">
         <option>X-Large</option>
-      </select>
-      <input type="number" class="form-control" id="xlarge-quantity">
-    </div>
-    <button type="submit" class="btn btn-default">Submit</button>
-  </form>
-
-
+    </select>
+    <input type="number" class="form-control" id="xlarge-quantity">
+</div> -->
+        <button type="submit" class="btn btn-default">Submit</button>
+    </form>
 </div>

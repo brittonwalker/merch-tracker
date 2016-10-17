@@ -48,40 +48,59 @@ $(document).ready(function() {
 
     $('#show-form').submit(function(e) {
         e.preventDefault();
-        var date = $('#date').val();
-        var merchId = $(this).attr('data-id');
-        var venue = $('#venue').val();
-        var contact = $('#contact').val();
-        var pay = $('#large').val();
-        var lat = $('#lat').val();
-        var lang = $('#lang').val();
-        var city = $('#city').val();
-        var address = $('#address').val();
-        $.ajax({
-            url: 'http://localhost:8080/api/show',
-            type: 'POST',
-            data: {
-                date: date,
-                address: address,
-                venue: venue,
-                contact: contact,
-                pay: pay,
-                coords: {
-                    'lat': lat,
-                    'lng': lang
-                }
-                // lat: lat,
-                // lang: lang,
-                // city: city
-            },
-            dataType: 'json'
-        }).done(function(res) {
-            console.log(res);
-            location.reload();
-        }).fail(function(res) {
-            console.log("Failed to update.");
-            console.log(res);
-        });
+        var show = {};
+        show.date = $('#date').val();
+        show.venue = $('#venue').val();
+        show.contact = $('#contact').val();
+        show.pay = $('#large').val();
+        show.lat = $('#lat').val();
+        show.lang = $('#lang').val();
+        show.city = $('#city').val();
+        show.address = $('#address').val();
+        show.merch = [];
+        // var date = $('#date').val();
+        // var venue = $('#venue').val();
+        // var contact = $('#contact').val();
+        // var pay = $('#large').val();
+        // var lat = $('#lat').val();
+        // var lang = $('#lang').val();
+        // var city = $('#city').val();
+        // var address = $('#address').val();
+        // var merch = [];
+        $.get('http://localhost:8080/api/merch', function(data){
+          $.each(data, function(i, v){
+            console.log(show);
+            var singleItem = { item: v.name, sold:0 }
+            show.merch.push(singleItem);
+            return show;
+          })
+        }).done(function(){
+          console.log(show);
+          $.ajax({
+              url: 'http://localhost:8080/api/show',
+              type: 'POST',
+              data: show,
+              // data: {
+              //     date: date,
+              //     address: address,
+              //     venue: venue,
+              //     contact: contact,
+              //     pay: pay,
+              //     merch: merch,
+              //     coords: {
+              //         'lat': lat,
+              //         'lng': lang
+              //     }
+              // },
+              dataType: 'json'
+          }).done(function(res) {
+              // location.reload();
+          }).fail(function(res) {
+              console.log("Failed to update.");
+              console.log(res);
+          });
+        })
+
     });
 
     $('#expense-form').submit(function(e) {
@@ -108,34 +127,36 @@ $(document).ready(function() {
     $('#single-show-form').submit(function(e) {
         e.preventDefault();
         var showId = $(this).attr('data-id');
-        console.log(showId);
+        var showUrl = "http://localhost:8080/api/show/" + showId.toString();
+        var show;
         var merch = [];
+        var oldMerch = [];
         $('.form-group').each(function(){
           var item = $(this).find('input').attr('id');
           var itemValue = $(this).find('input').val();
+          if(itemValue === ''){ itemValue = 0; }
           var itemType = $(this).find('input').attr('data-merch-type');
-          console.log(itemType);
-          // if()
-          merch.push(
-            {
-              item: item,
-              sold: itemValue
-            }
-          );
-        })
-        $.ajax({
-            url: 'http://localhost:8080/api/show/' + showId.toString(),
-            type: 'PUT',
-            data: {
-                merch: merch
-            },
-            dataType: 'json'
-        }).done(function(res) {
-            console.log(res);
-            location.reload();
-        }).fail(function(res) {
-            console.log("Failed to update.");
-            console.log(res);
+          merch.push({item: item, sold: itemValue});
+        });
+        $.get(showUrl, function(data){
+          var show = data;
+          console.log(show);
+          $.each(show.merch, function(i, v){ console.log(show); oldMerch.push(v.sold); });
+          return show, oldMerch;
+        }).done(function(show){
+          $.each(merch, function(z, k){ k.sold = parseInt(k.sold) + parseInt(oldMerch[z]); });
+          show.merch = merch;
+          $.ajax({
+              url: showUrl,
+              type: 'PUT',
+              data: show,
+              dataType: 'json'
+          }).done(function(res) {
+              // location.reload();
+          }).fail(function(res) {
+              console.log("Failed to update.");
+              console.log(res);
+          });
         });
     });
 
@@ -156,33 +177,13 @@ $(document).ready(function() {
     var $showsTable = $('#shows-table');
     $.get(url2, function(data) {
         $.each(data, function(index, value) {
-            // var date = new Date(value.date),
-            //     day = date.getDate(),
-            //     month = date.getMonth() + 1,
-            //     year = date.getFullYear();
-            // var urlId = showpage + value._id;
-            // var displayDate = '<td><a href="' + urlId + '">' + month + '/' + day + '/' + year + '</a></td>';
-            // var venue = '<td>' + value.venue + '</td>';
-            // var contact = '<td>' + value.contact + '</td>';
-            // var pay = '<td>' + value.pay + '</td>';
-            // var city = '<td>' + value.city + '</td>';
             var lat = value.lat || null;
             var lang = value.lang || null;
-            // console.log(urlId);
             L.marker([lat, lang]).addTo(mymap);
-            // $showsTable.append('<tr class="' + 'clickable-row' +'" data-href="' + urlId + '">' + urlId + displayDate + '</a>' + city + venue + contact + pay + '</tr>')
         });
     });
 
     var url = 'http://localhost:8080/api/merch/';
-    // var $tbody = $('#merch-table');
-    //
-    // $.get(url, function(data) {
-    //     $.each(data, function(index, value) {
-    //         var urlId = '<a href="' + url + value._id + '">';
-    //         $tbody.append('<tr><td>' + urlId + value.name + '</a></td>><td>' + value.quantity + '</td></tr>')
-    //     });
-    // })
 
     var showId = $('#show-id');
     if (showId > 0) {

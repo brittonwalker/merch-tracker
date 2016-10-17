@@ -12,20 +12,16 @@
       <th>City</th>
       <th>Venue</th>
       <th>Contact</th>
-      <th>Pay</th>
     </tr>
   </thead>
   <tbody id="shows-table">
     {{#each show}}
-
       <tr>
         <td><a href="http://localhost:8080/shows/{{_id}}">{{date}}</a></td>
-        <td>{{city}}</td>
-        <td>{{venue}}</td>
-        <td>{{contact}}</td>
-        <td>{{pay}}</td>
+        <td><a href="http://localhost:8080/shows/{{_id}}">{{city}}</a></td>
+        <td><a href="http://localhost:8080/shows/{{_id}}">{{venue}}</a></td>
+        <td><a href="http://localhost:8080/shows/{{_id}}">{{contact}}</a></td>
       </tr>
-
     {{/each}}
   </tbody>
 </table>

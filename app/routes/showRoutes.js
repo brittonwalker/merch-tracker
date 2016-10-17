@@ -16,8 +16,8 @@ module.exports = function(router, app) {
           show.coords = {};
           show.coords.lat = req.body.lat;
           show.coords.lng = req.body.lng;
-          show.merch = [];
-
+          show.merch = req.body.merch;
+          // show.merch = [];
           show.save(function(err) {
               if (err) {
                   res.send(err);
