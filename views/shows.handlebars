@@ -1,66 +1,69 @@
-
 <div class="container">
-  <h1>Shows</h1>
-<div id="mapid"></div>
+    <h1>Shows</h1>
+    <div id="mapid"></div>
 </div>
 <div class="container">
-  <h2>Show Table</h2>
-<table class="table">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>City</th>
-      <th>Venue</th>
-      <th>Contact</th>
-    </tr>
-  </thead>
-  <tbody id="shows-table">
-    {{#each show}}
-      <tr>
-        <td><a href="http://localhost:8080/shows/{{_id}}">{{date}}</a></td>
-        <td><a href="http://localhost:8080/shows/{{_id}}">{{city}}</a></td>
-        <td><a href="http://localhost:8080/shows/{{_id}}">{{venue}}</a></td>
-        <td><a href="http://localhost:8080/shows/{{_id}}">{{contact}}</a></td>
-      </tr>
-    {{/each}}
-  </tbody>
-</table>
+    <h2>Show Table</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>City</th>
+                <th>Venue</th>
+                <th>Contact</th>
+            </tr>
+        </thead>
+        <tbody id="shows-table">
+            {{#each show}}
+                <tr>
+                    <td><a href="http://localhost:8080/shows/{{_id}}">{{date}}</a></td>
+                    <td><a href="http://localhost:8080/shows/{{_id}}">{{city}}</a></td>
+                    <td><a href="http://localhost:8080/shows/{{_id}}">{{venue}}</a></td>
+                    <td><a href="http://localhost:8080/shows/{{_id}}">{{contact}}</a></td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
-<form id="show-form">
-  <div class="form-group">
-    <label for="date">Date:</label>
-    <input type="date" class="form-control" id="date">
-  </div>
-  <div class="form-group">
-    <label for="address">Address:</label>
-    <input type="text" class="form-control" id="address">
-  </div>
-  <div class="form-group">
-    <label for="city">City:</label>
-    <input type="text" class="form-control" id="city">
-  </div>
-  <div class="form-group">
-    <label for="venue">Venue:</label>
-    <input type="text" class="form-control" id="venue">
-  </div>
-  <div class="form-group">
-    <label for="contact">Contact:</label>
-    <input type="text" class="form-control" id="contact">
-  </div>
-  <div class="form-group">
-    <label for="pay">Pay:</label>
-    <input type="number" class="form-control" id="pay">
-  </div>
-  <div class="form-group">
-    <label for="lat">Lat:</label>
-    <input type="text" class="form-control" id="lat">
-  </div>
-  <div class="form-group">
-    <label for="lang">Lang:</label>
-    <input type="text" class="form-control" id="lang">
-  </div>
-  <button type="submit" class="btn btn-default">Add Show</button>
-</form>
+    <button type="button" name="button" id="show-show-form">Show Form</button>
+</div>
+
+<div class="container">
+    <form id="show-form">
+        <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="date" class="form-control" id="date">
+        </div>
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <input type="text" class="form-control" id="address">
+        </div>
+        <div class="form-group">
+            <label for="city">City:</label>
+            <input type="text" class="form-control" id="city">
+        </div>
+        <div class="form-group">
+            <label for="venue">Venue:</label>
+            <input type="text" class="form-control" id="venue">
+        </div>
+        <div class="form-group">
+            <label for="contact">Contact:</label>
+            <input type="text" class="form-control" id="contact">
+        </div>
+        <div class="form-group">
+            <label for="pay">Pay:</label>
+            <input type="number" class="form-control" id="pay">
+        </div>
+        <div class="form-group">
+            <label for="lat">Lat:</label>
+            <input type="text" class="form-control" id="lat">
+        </div>
+        <div class="form-group">
+            <label for="lang">Lang:</label>
+            <input type="text" class="form-control" id="lang">
+        </div>
+        <button type="submit" class="btn btn-default">Add Show</button>
+    </form>
 </div>

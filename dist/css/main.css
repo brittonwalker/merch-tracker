@@ -6273,3 +6273,6 @@ button.close {
 
 #mapid {
   height: 400px; }
+
+#show-form {
+  display: none; }
