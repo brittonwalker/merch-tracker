@@ -2,8 +2,8 @@ $(document).ready(function() {
 
     var TD = {
       init: function(){
-        this.updateShow(this.els.singleShowForm);
         // this.initMap.init(this.els.map);
+        this.updateShow(this.els.singleShowForm);
         this.initShowForm(this.els.showsForm);
         this.deleteShow(this.els.deleteShowButton);
         this.toggleShowForm(this.els.showShowForm);
@@ -16,7 +16,6 @@ $(document).ready(function() {
         showShowForm: $('#show-show-form')
       },
       toggleShowForm: function(b){
-        console.log(b);
         b.click(function(){
           $(this).toggle();
           console.log('clicked');
@@ -46,7 +45,6 @@ $(document).ready(function() {
             var showId = b.attr('data-id');
             var showUrl = "http://localhost:8080/api/show/" + showId.toString();
             var show;
-            var merch = [];
             var oldMerch = [];
             b.find($('.form-group')).each(function() {
                 var item = $(this).find('input').attr('id');
@@ -55,29 +53,40 @@ $(document).ready(function() {
                 if (itemValue === '') {
                     itemValue = 0;
                 }
-                merch.push({
-                    item: item,
-                    sold: itemValue
-                });
+                oldMerch.push(itemValue);
             });
             $.get(showUrl, function(data) {
                 var show = data;
-                $.each(show.merch, function(i, v) {
-                    oldMerch.push(v.sold);
-                });
-                return show, oldMerch;
+                return show;
             }).done(function(show) {
-                $.each(merch, function(z, k) {
+                $.each(show.merch, function(z, k) {
                     k.sold = parseInt(k.sold) + parseInt(oldMerch[z]);
                 });
-                show.merch = merch;
                 $.ajax({
                     url: showUrl,
                     type: 'PUT',
                     data: show,
                     dataType: 'json'
                 }).done(function(res) {
-                    location.reload();
+                    $.each(show.merch, function(a, b){
+                      var merchUrl = 'http://localhost:8080/api/merch/' + b.id;
+                      $.get(merchUrl, function(data){
+                        var merch = data;
+                        merch.quantity = merch.quantity - b.sold;
+                        return merch;
+                      }).done(function(merch){
+                        $.ajax({
+                          url: merchUrl,
+                          type: 'PUT',
+                          data: merch,
+                          dataType: 'json'
+                        }).done(function(res){
+                          console.log(res);
+                        })
+                      })
+                    })
+                    console.log(res);
+                    // location.reload();
                 }).fail(function(res) {
                     console.log("Failed to update.");
                     console.log(res);
@@ -122,7 +131,8 @@ $(document).ready(function() {
                 $.each(data, function(i, v) {
                     var singleItem = {
                         item: v.name,
-                        sold: 0
+                        sold: 0,
+                        id: v._id
                     };
                     show.merch.push(singleItem);
                     return show;
@@ -144,50 +154,6 @@ $(document).ready(function() {
       }
     };
     TD.init();
-
-    // $('#single-show-form').submit(function(e) {
-    //     e.preventDefault();
-    //     var showId = $(this).attr('data-id');
-    //     var showUrl = "http://localhost:8080/api/show/" + showId.toString();
-    //     var show;
-    //     var merch = [];
-    //     var oldMerch = [];
-    //     $('.form-group').each(function() {
-    //         var item = $(this).find('input').attr('id');
-    //         var itemValue = $(this).find('input').val();
-    //         var itemType = $(this).find('input').attr('data-merch-type');
-    //         if (itemValue === '') {
-    //             itemValue = 0;
-    //         }
-    //         merch.push({
-    //             item: item,
-    //             sold: itemValue
-    //         });
-    //     });
-    //     $.get(showUrl, function(data) {
-    //         var show = data;
-    //         $.each(show.merch, function(i, v) {
-    //             oldMerch.push(v.sold);
-    //         });
-    //         return show, oldMerch;
-    //     }).done(function(show) {
-    //         $.each(merch, function(z, k) {
-    //             k.sold = parseInt(k.sold) + parseInt(oldMerch[z]);
-    //         });
-    //         show.merch = merch;
-    //         $.ajax({
-    //             url: showUrl,
-    //             type: 'PUT',
-    //             data: show,
-    //             dataType: 'json'
-    //         }).done(function(res) {
-    //             location.reload();
-    //         }).fail(function(res) {
-    //             console.log("Failed to update.");
-    //             console.log(res);
-    //         });
-    //     });
-    // });
 
     $('#merch-form').submit(function(e) {
         e.preventDefault();
