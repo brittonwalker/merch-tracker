@@ -2,7 +2,7 @@ $(document).ready(function() {
 
     var TD = {
       init: function(){
-        // this.initMap.init(this.els.map);
+        this.initMap.init(this.els.map);
         this.updateShow(this.els.singleShowForm);
         this.initShowForm(this.els.showsForm);
         this.deleteShow(this.els.deleteShowButton);
@@ -15,10 +15,28 @@ $(document).ready(function() {
         deleteShowButton: $('#delete-show'),
         showShowForm: $('#show-show-form')
       },
+      initMap:  {
+          init: function(map) {
+              if(map.length)
+                var mymap = L.map('mapid').setView([27.664827, -81.515754], 5);
+                this.makeTiles(mymap);
+                this.disableScroll(mymap);
+          },
+          makeTiles: function(map) {
+              L.tileLayer("http://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+                  attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                  maxZoom: 18,
+                  id: 'brittonwalker.okh8c6b8',
+                  accessToken: 'pk.eyJ1IjoiYnJpdHRvbndhbGtlciIsImEiOiJjaWozOG16d3IwMDN0dW1rcDU3OXJxeWEzIn0.yfclBrxnvpCzJZkZtLYQdg'
+              }).addTo(map);
+          },
+          disableScroll: function(map) {
+              map.scrollWheelZoom.disable();
+          }
+      },
       toggleShowForm: function(b){
         b.click(function(){
           $(this).toggle();
-          console.log('clicked');
           TD.els.showsForm.toggle();
         })
       },
@@ -86,32 +104,13 @@ $(document).ready(function() {
                       })
                     })
                     console.log(res);
-                    // location.reload();
+                    location.reload();
                 }).fail(function(res) {
                     console.log("Failed to update.");
                     console.log(res);
                 });
             });
         });
-      },
-      initMap:  {
-          init: function(map) {
-              if(map.length)
-                var mymap = L.map('mapid').setView([27.664827, -81.515754], 5);
-                this.makeTiles(mymap);
-                this.disableScroll(mymap);
-          },
-          makeTiles: function(map) {
-              L.tileLayer("http://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-                  attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-                  maxZoom: 18,
-                  id: 'brittonwalker.okh8c6b8',
-                  accessToken: 'pk.eyJ1IjoiYnJpdHRvbndhbGtlciIsImEiOiJjaWozOG16d3IwMDN0dW1rcDU3OXJxeWEzIn0.yfclBrxnvpCzJZkZtLYQdg'
-              }).addTo(map);
-          },
-          disableScroll: function(map) {
-              map.scrollWheelZoom.disable();
-          }
       },
       initShowForm: function(b){
         if(b.length)
@@ -241,7 +240,7 @@ $(document).ready(function() {
     //     }
     // }
     // mapObject.init();
-
+    // console.log('hey there')
     // var map = $('#mapid');
     // var mymap = L.map('mapid').setView([27.664827, -81.515754], 5);
     // L.tileLayer("http://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
